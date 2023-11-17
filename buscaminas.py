@@ -41,7 +41,8 @@ class BuscaminasGUI:
             self.master.destroy()
         else:
             minas_alrededor = self.minas_vecinas(fila, columna)
-            self.buttons[fila][columna].config(text=str(minas_alrededor))
+            if minas_alrededor > 0:
+                self.buttons[fila][columna].config(text=str(minas_alrededor))
             if minas_alrededor == 0:
                 for r, c in self.celdas_vecinas(fila, columna):
                     self.cavar(r, c)
