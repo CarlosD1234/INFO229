@@ -1,4 +1,4 @@
-# INFO229 Grupo 2
+# INFO229 Equipo 2
 ## Integrantes:
 -Pablo Cisterna<br>
 -Cristian Oyarce<br>
