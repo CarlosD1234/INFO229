@@ -1,3 +1,4 @@
+import pygame
 import tkinter as tk
 from tkinter import messagebox
 import random
@@ -13,6 +14,8 @@ class BuscaminasGUI:
         self.tablero = [[' ' for _ in range(ancho)] for _ in range(alto)]
         self.colocar_minas()
         self.celdas_descubiertas = set()
+        pygame.init()
+        self.sonido_mina = pygame.mixer.Sound("boom.wav")
 
     def inicializar_interfaz(self):
         for fila in range(self.alto):
@@ -36,14 +39,16 @@ class BuscaminasGUI:
             return
         self.celdas_descubiertas.add((fila, columna))
         if self.tablero[fila][columna] == 'X':
+            self.sonido_mina.play()  # Reproduce el sonido
             self.revelar_minas()
             messagebox.showinfo("Game Over", "Has pisado una mina. ¡Juego terminado!")
             self.master.destroy()
         else:
             minas_alrededor = self.minas_vecinas(fila, columna)
             if minas_alrededor > 0:
-                self.buttons[fila][columna].config(text=str(minas_alrededor))
-            if minas_alrededor == 0:
+                self.buttons[fila][columna].config(text=str(minas_alrededor), bg='gray')
+            else:
+                self.buttons[fila][columna].config(text=' ', bg='gray')
                 for r, c in self.celdas_vecinas(fila, columna):
                     self.cavar(r, c)
 
