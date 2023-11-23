@@ -51,6 +51,9 @@ class BuscaminasGUI:
                 self.buttons[fila][columna].config(text=' ', bg='gray')
                 for r, c in self.celdas_vecinas(fila, columna):
                     self.cavar(r, c)
+        if len(self.celdas_descubiertas) + self.minas == self.alto * self.ancho:
+            messagebox.showinfo("¡Felicidades!", "¡Has ganado el juego!")
+            self.master.destroy()
 
     def minas_vecinas(self, fila, columna):
         return sum(1 for r, c in self.celdas_vecinas(fila, columna) if self.tablero[r][c] == 'X')
