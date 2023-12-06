@@ -4,6 +4,10 @@ from tkinter import messagebox
 import random
 
 class BuscaminasGUI:
+	#Patron Game Loop
+	#ProcessInput: revelar_Minas(Self), cavar(self, fila, columna)
+	#Update: minas_vecinas(self, fila, columna), celdas_vecinas(self, fila, columna)
+	#Render: inicializar_interfaz(self)
     def __init__(self, master, alto, ancho, minas):
         self.alto = alto
         self.ancho = ancho
@@ -16,7 +20,9 @@ class BuscaminasGUI:
         self.celdas_descubiertas = set()
         pygame.init()
         self.sonido_mina = pygame.mixer.Sound("boom.wav")
-
+        self.sonido_mina.set_volume(0.2)
+	
+	#Interfaz de usuario
     def inicializar_interfaz(self):
         for fila in range(self.alto):
             for columna in range(self.ancho):
@@ -51,9 +57,9 @@ class BuscaminasGUI:
                 self.buttons[fila][columna].config(text=' ', bg='gray')
                 for r, c in self.celdas_vecinas(fila, columna):
                     self.cavar(r, c)
-        if len(self.celdas_descubiertas) + self.minas == self.alto * self.ancho:
-            messagebox.showinfo("¡Felicidades!", "¡Has ganado el juego!")
-            self.master.destroy()
+                if len(self.celdas_descubiertas) + self.minas == self.alto * self.ancho:
+                    messagebox.showinfo("¡Felicidades!", "¡Has ganado el juego!")
+                    self.master.destroy()
 
     def minas_vecinas(self, fila, columna):
         return sum(1 for r, c in self.celdas_vecinas(fila, columna) if self.tablero[r][c] == 'X')
@@ -65,21 +71,32 @@ class BuscaminasGUI:
                 if (r, c) != (fila, columna):
                     vecinos.append((r, c))
         return vecinos
-
+    #Revela todas las minas al perder el juego
     def revelar_minas(self):
         for r in range(self.alto):
             for c in range(self.ancho):
                 if self.tablero[r][c] == 'X':
                     self.buttons[r][c].config(text='X', bg='red')
 
+#Aqui se configura el tamaño del tablero y la cantidad de minas
+def config():
+    alto = int(input("Ingrese la altura del tablero: "))
+    ancho= int(input("Ingrese el ancho del tablero: "))
+    minas = int(input("Ingrese la cantidad de minas: "))
+
+    while minas >= (alto * ancho):
+        print("ERROR: la cantidad de minas no puede ser mayor a la contidad de celdas\n")
+        minas = int(input("Ingrese la cantidad de minas: "))
+    
+    return alto, ancho, minas
+
 def main():
-    root = tk.Tk()
-    root.title("Buscaminas")
 
     # Establece las dimensiones del juego
-    alto = 10
-    ancho = 10
-    minas = 10
+    alto, ancho, minas = config()
+
+    root = tk.Tk()
+    root.title("Buscaminas")
 
     BuscaminasGUI(root, alto, ancho, minas)
     root.mainloop()
