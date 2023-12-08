@@ -20,9 +20,9 @@ class BuscaminasGUI:
         self.celdas_descubiertas = set()
         pygame.init()
         self.sonido_mina = pygame.mixer.Sound("boom.wav")
-        self.sonido_mina.set_volume(0.2)
+        self.sonido_mina.set_volume(0.1)
 	
-	#Interfaz de usuario
+	#Inicializa la interfaz del juego creando los botones
     def inicializar_interfaz(self):
         for fila in range(self.alto):
             for columna in range(self.ancho):
@@ -31,6 +31,7 @@ class BuscaminasGUI:
                 btn.grid(row=fila, column=columna)
                 self.buttons[fila][columna] = btn
 
+    #Coloca las minas en el tablero de forma aleatoria
     def colocar_minas(self):
         minas_colocadas = 0
         while minas_colocadas < self.minas:
@@ -40,6 +41,7 @@ class BuscaminasGUI:
                 self.tablero[fila][columna] = 'X'
                 minas_colocadas += 1
 
+    #Revela las celdas al hacer click, tambien termina el juego si se pisa una mina (derrota) o si solo quedan minas en el tablero (victoria)
     def cavar(self, fila, columna):
         if (fila, columna) in self.celdas_descubiertas:
             return
@@ -61,9 +63,12 @@ class BuscaminasGUI:
                     messagebox.showinfo("¡Felicidades!", "¡Has ganado el juego!")
                     self.master.destroy()
 
+    
+    # Calcula la cantidad de minas vecinas a una celda específica
     def minas_vecinas(self, fila, columna):
         return sum(1 for r, c in self.celdas_vecinas(fila, columna) if self.tablero[r][c] == 'X')
 
+    # Obtiene las celdas vecinas de una celda específica
     def celdas_vecinas(self, fila, columna):
         vecinos = []
         for r in range(max(0, fila - 1), min(self.alto, fila + 2)):
@@ -71,6 +76,7 @@ class BuscaminasGUI:
                 if (r, c) != (fila, columna):
                     vecinos.append((r, c))
         return vecinos
+    
     #Revela todas las minas al perder el juego
     def revelar_minas(self):
         for r in range(self.alto):
@@ -78,14 +84,14 @@ class BuscaminasGUI:
                 if self.tablero[r][c] == 'X':
                     self.buttons[r][c].config(text='X', bg='red')
 
-#Aqui se configura el tamaño del tablero y la cantidad de minas
+#Configura las dimensiones del tablero y la cantidad de minas mediante la entrada del usuario
 def config():
     alto = int(input("Ingrese la altura del tablero: "))
     ancho= int(input("Ingrese el ancho del tablero: "))
     minas = int(input("Ingrese la cantidad de minas: "))
 
     while minas >= (alto * ancho):
-        print("ERROR: la cantidad de minas no puede ser mayor a la contidad de celdas\n")
+        print("ERROR: la cantidad de minas no puede ser mayor o igual a la contidad de celdas\n")
         minas = int(input("Ingrese la cantidad de minas: "))
     
     return alto, ancho, minas
