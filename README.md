@@ -5,6 +5,8 @@
 -Carlos Duarte
 
 ## Requisitos:
+Tener Python instalado.
+
 Tkinter (a veces instalado por defecto):
 ```
 sudo apt-get install python3-tk
