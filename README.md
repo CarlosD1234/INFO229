@@ -17,6 +17,6 @@ pip install pygame
 ```
 
 ## Como jugar:
--Ejecutar main.py
--Introducir el valor de alto, ancho y el número de minas del tablero
+-Ejecutar main.py<br>
+-Introducir el valor de alto, ancho y el número de minas del tablero<br>
 -Pulsar las celdas hasta que solo queden las celdas que contienen minas para ganar
